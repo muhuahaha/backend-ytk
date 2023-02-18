@@ -1,4 +1,3 @@
-const asyncHandler = require('express-async-handler');
 const mongoose = require('mongoose');
 const Note = require('../models/Note');
 const User = require('../models/User');
@@ -6,7 +5,7 @@ const User = require('../models/User');
 // @desc Get all notes
 // @route GET /notes
 // @access Private
-const getAllNotes = asyncHandler(async (req, res) => {
+const getAllNotes = async (req, res) => {
   // Get all notes from MongoDB
   const notes = await Note.find().lean();
   // If no notes
@@ -25,9 +24,9 @@ const getAllNotes = asyncHandler(async (req, res) => {
   );
 
   res.json(notesWithUser);
-});
+};
 
-const getSingleNote = asyncHandler(async (req, res) => {
+const getSingleNote = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -41,12 +40,12 @@ const getSingleNote = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(note);
-});
+};
 
 // @desc Create new note
 // @route POST /notes
 // @access Private
-const createNewNote = asyncHandler(async (req, res) => {
+const createNewNote = async (req, res) => {
   const {
     user,
     title,
@@ -91,12 +90,12 @@ const createNewNote = asyncHandler(async (req, res) => {
     return res.status(201).json({ message: 'New note created' });
   }
   return res.status(400).json({ message: 'Invalid note data received' });
-});
+};
 
 // @desc Update a note
 // @route PATCH /notes
 // @access Private
-const updateNote = asyncHandler(async (req, res) => {
+const updateNote = async (req, res) => {
   const {
     id,
     user,
@@ -156,12 +155,12 @@ const updateNote = asyncHandler(async (req, res) => {
   const updatedNote = await note.save();
 
   res.json(`'${updatedNote.title}' updated`);
-});
+};
 
 // @desc Delete a note
 // @route DELETE /notes
 // @access Private
-const deleteNote = asyncHandler(async (req, res) => {
+const deleteNote = async (req, res) => {
   const { id } = req.body;
 
   // Confirm data
@@ -181,9 +180,9 @@ const deleteNote = asyncHandler(async (req, res) => {
   const reply = `Note '${result.title}' with ID ${result._id} deleted`;
 
   res.json(reply);
-});
+};
 
-const searchNoteByTitle = asyncHandler(async (req, res) => {
+const searchNoteByTitle = async (req, res) => {
   const queryTitle = new RegExp(req.params?.title, 'i');
   // Get all notes from MongoDB
   const notes = await Note.find({ title: queryTitle });
@@ -205,7 +204,7 @@ const searchNoteByTitle = asyncHandler(async (req, res) => {
   );
 
   res.json(notesWithUser);
-});
+};
 
 module.exports = {
   getAllNotes,
