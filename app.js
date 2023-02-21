@@ -18,7 +18,13 @@ app.use(logger);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
+
 app.use(morgan('dev'));
+
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/', require('./routes/root'));
 app.use('/auth', require('./routes/authRoutes'));
@@ -27,6 +33,9 @@ app.use('/notes', require('./routes/noteRoutes'));
 app.use('/api/v1/challenges', require('./routes/challengeRoutes'));
 
 app.use('/movies', require('./routes/movieRoutes'));
+
+// // SERVING TEMPLATE DEMO
+// app.use(express.static(`${__dirname}/challenge-data/img`));
 
 // CUSTOM MIDDLE WARE
 app.use((req, res, next) => {
